@@ -13,7 +13,13 @@ namespace TheaterApplicatie.Controllers
         public ActionResult Index()
         {
             // TODO: Lijst van klanten ophalen
+            /*
+                Vrijdag verder:
 
+                - IService voor Klant/ Reservering / Prijs
+                - aanspreken in controller + schermen uitwerken
+                - reservering - pagina verder uitwerken
+            */
             return View();
         }
 
