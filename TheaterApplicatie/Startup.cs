@@ -25,7 +25,8 @@ namespace TheaterApplicatie
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IObjectService<Klant>>(new KlantMemoryService());
+            //services.AddSingleton<IObjectService<Klant>>(new KlantMemoryService());
+            services.AddSingleton<IObjectService<Klant>>(new KlantApiService());
             services.AddControllersWithViews();
         }
 
