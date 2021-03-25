@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TheaterApplicatie.Data;
 
 namespace TheaterApplicatie
 {
@@ -23,6 +24,7 @@ namespace TheaterApplicatie
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IKlantService>(new KlantMemoryService());
             services.AddControllersWithViews();
         }
 
@@ -50,7 +52,7 @@ namespace TheaterApplicatie
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Klanten}/{action=Index}/{id?}");
             });
         }
     }

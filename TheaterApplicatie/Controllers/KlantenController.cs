@@ -4,11 +4,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TheaterApplicatie.Data;
 
 namespace TheaterApplicatie.Controllers
 {
     public class KlantenController : Controller
     {
+        private readonly IKlantService klantService;
+
+        public KlantenController(IKlantService klantService)
+        {
+            this.klantService = klantService;
+        }
         // GET: KlantenController
         public ActionResult Index()
         {
@@ -20,7 +27,7 @@ namespace TheaterApplicatie.Controllers
                 - aanspreken in controller + schermen uitwerken
                 - reservering - pagina verder uitwerken
             */
-            return View();
+            return View(klantService.GetAll());
         }
 
         // GET: KlantenController/Details/5

@@ -6,7 +6,7 @@ using TheaterApplicatie.Models;
 
 namespace TheaterApplicatie.Data
 {
-    interface IKlantService
+    public interface IKlantService
     {
         List<Klant> GetAll();
         Klant Get(int id);
