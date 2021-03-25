@@ -6,7 +6,8 @@ using TheaterApplicatie.Models;
 
 namespace TheaterApplicatie.Data
 {
-    public class KlantMemoryService : IKlantService
+//    public class KlantMemoryService : IKlantService
+    public class KlantMemoryService : IObjectService<Klant>
     {
         private readonly Dictionary<int, Klant> _klanten;
         public KlantMemoryService()

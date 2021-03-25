@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TheaterApplicatie.Data;
+using TheaterApplicatie.Models;
 
 namespace TheaterApplicatie.Controllers
 {
     public class KlantenController : Controller
     {
-        private readonly IKlantService klantService;
+        private readonly IObjectService<Klant> klantService;
 
-        public KlantenController(IKlantService klantService)
+        public KlantenController(IObjectService<Klant> klantService)
         {
             this.klantService = klantService;
         }

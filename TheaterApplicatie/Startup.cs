@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TheaterApplicatie.Data;
+using TheaterApplicatie.Models;
 
 namespace TheaterApplicatie
 {
@@ -24,7 +25,7 @@ namespace TheaterApplicatie
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IKlantService>(new KlantMemoryService());
+            services.AddSingleton<IObjectService<Klant>>(new KlantMemoryService());
             services.AddControllersWithViews();
         }
 
