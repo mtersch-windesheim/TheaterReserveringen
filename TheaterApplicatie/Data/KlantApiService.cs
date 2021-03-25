@@ -11,10 +11,10 @@ namespace TheaterApplicatie.Data
     public class KlantApiService : IObjectService<Klant>
     {
         private readonly HttpClient httpClient;
-        public KlantApiService()
+
+        public KlantApiService(HttpClient httpClient)
         {
-            httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://localhost:5001/");
+            this.httpClient = httpClient;
         }
         public void Add(Klant klant)
         {

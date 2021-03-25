@@ -25,8 +25,13 @@ namespace TheaterApplicatie
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Zie https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-5.0#consumption-patterns
+            // In het bijzonder het deel 'Typed Clients', en het stukje over configuratie onder 'Named Clients'
+            services.AddHttpClient<IObjectService<Klant>, KlantApiService>("TheaterApi", clt =>
+            {
+                clt.BaseAddress = new Uri(Configuration.GetValue<string>("ApiUri"));
+            });
             //services.AddSingleton<IObjectService<Klant>>(new KlantMemoryService());
-            services.AddSingleton<IObjectService<Klant>>(new KlantApiService());
             services.AddControllersWithViews();
         }
 
