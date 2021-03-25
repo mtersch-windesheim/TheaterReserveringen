@@ -38,11 +38,14 @@ namespace TheaterApplicatie.Data
 
         public List<Klant> GetAll()
         {
-            string returnString = httpClient.GetAsync("/api/Klanten").Result.Content.ReadAsStringAsync().Result;
-            return JsonSerializer.Deserialize<List<Klant>>(
-                returnString,
-                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }
-            );
+            List<Klant> klanten = new List<Klant>();
+            HttpResponseMessage responseMessage = httpClient.GetAsync("/api/Klanten").Result;
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                // Voeg package Microsoft.AspNet.WebApi.Client toe voor extension method ReadAsAsync<T>()
+                klanten = responseMessage.Content.ReadAsAsync<List<Klant>>().Result;
+            }
+            return klanten;
         }
 
         public bool Update(Klant klant)
