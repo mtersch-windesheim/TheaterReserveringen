@@ -112,5 +112,12 @@ namespace TheaterApplicatie.Controllers
 
             return View(reserveringen);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditWithKlantId(int? klantId, int[] reserveringIds)
+        {
+            // Placeholder-code voor testen
+            return NotFound();
+        }
     }
 }

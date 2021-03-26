@@ -1,19 +1,19 @@
 ﻿@model IEnumerable<Reservering>
-<ul>
-    @foreach (var reservering in Model)
-    {
-    <li>
-        <input type="checkbox"
-               @if (reservering.Bezet) { @Html.Raw(" checked= \"checked\""); }
-               @if (reservering.Bezet && (reservering.KlantId != (int)(ViewData["klantId"]))) { Html.Raw(" disabled"); }
-               />
-        <span
-              @if (!reservering.Bezet) { @Html.Raw("style=\"background-color:green\""); }
-              else if(reservering.KlantId == (int)(ViewData["klantId"])) { @Html.Raw("style=\"background-color:blue\""); }
-              else { @Html.Raw("style=\"background-color:red\""); }
-              >
-            @reservering.Naam
-        </span>
-    </li>
-    }
-</ul>
+    <form method="post">
+        <input type="hidden" name="klantId" value="@ViewData["klantId"]" />
+        <ul>
+            @foreach (var reservering in Model)
+            {
+                <li>
+                    <input type="checkbox" name="reserveringIds" value="@reservering.ReserveringId"
+                           @if (reservering.Bezet) { @Html.Raw(" checked= \"checked\"") ; }
+                           @if (reservering.Bezet && !(reservering.KlantId.ToString() == ViewData["klantId"].ToString())) { @Html.Raw(" disabled"); }
+                           />
+                    <span @if (!reservering.Bezet) { @Html.Raw("style=\"background-color:green\"") ; } else if (reservering.KlantId == (int)(ViewData["klantId"])) { @Html.Raw("style=\"background-color:blue\"") ; } else { @Html.Raw("style=\"background-color:red\"") ; }>
+                        @reservering.Naam
+                    </span>
+                </li>
+            }
+        </ul>
+        <input type="submit" value="Reserveren" />
+    </form>
