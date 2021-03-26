@@ -11,18 +11,18 @@ namespace TheaterApplicatie.Controllers
 {
     public class ReserveringenController : Controller
     {
-        private readonly IObjectService<Reservering> objectService;
+        private readonly IObjectService<Reservering> reserveringService;
         private readonly IObjectService<Klant> klantService;
 
         public ReserveringenController(IObjectService<Reservering> objectService, IObjectService<Klant> klantService)
         {
-            this.objectService = objectService;
+            this.reserveringService = objectService;
             this.klantService = klantService;
         }
         // GET: ReserveringenController
         public ActionResult Index()
         {
-            return View(objectService.GetAll());
+            return View(reserveringService.GetAll());
         }
 
         // GET: ReserveringenController/Details/5
@@ -101,9 +101,7 @@ namespace TheaterApplicatie.Controllers
             
             // Wat nodig:
             // - *alle* stoelen (= Reservering-objecten in DB)
-            List<Reservering> reserveringen = objectService.GetAll();
-            // - reserveringen van huidige klant
-            //List<Reservering> klantReserveringen = reserveringen.Where(res => res.KlantId == id).ToList();
+            List<Reservering> reserveringen = reserveringService.GetAll();
             // - huidige klant (i.v.m. klantdetails bovenin)
             Klant klant = klantService.Get(id);
 
@@ -116,8 +114,39 @@ namespace TheaterApplicatie.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditWithKlantId(int? klantId, int[] reserveringIds)
         {
-            // Placeholder-code voor testen
-            return NotFound();
+            if (!klantService.Exists(klantId.GetValueOrDefault()))
+                return NotFound();
+            else
+            {
+                List<Reservering> reserveringen = reserveringService.GetAll();
+                List<Reservering> mutaties = new List<Reservering>();
+                foreach (var reservering in reserveringen)
+                {
+                    // Opties:
+                    // - reservering van klant, aangevinkt => geen mutatie
+                    // - reservering van iemand anders => geen mutatie
+                    // - reservering van klant, niet aangevinkt => mutatie: bezet = false; klantid leeg
+                    if (reservering.KlantId.GetValueOrDefault() == klantId.GetValueOrDefault() && !reserveringIds.Contains(reservering.ReserveringId))
+                    {
+                        reservering.KlantId = null;
+                        reservering.Bezet = false;
+                        mutaties.Add(reservering);
+                    }
+                    // - reservering van niemand, aangevinkt => mutatie: bezet = true; klantid = id huidige klant
+                    if (!reservering.Bezet && reserveringIds.Contains(reservering.ReserveringId))
+                    {
+                        reservering.KlantId = klantId;
+                        reservering.Bezet = true;
+                        mutaties.Add(reservering);
+                    }
+                    // - reservering van niemand, niet aangevinkt => geen mutatie
+                }
+                foreach(var reservering in mutaties)
+                {
+                    reserveringService.Update(reservering.ReserveringId, reservering);  // TODO: returnvalues controleren en evt. melding van maken
+                }
+                return RedirectToAction(nameof(KlantenController.Index), "Klanten");
+            }
         }
     }
 }

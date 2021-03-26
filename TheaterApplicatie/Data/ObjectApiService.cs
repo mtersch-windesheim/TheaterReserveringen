@@ -56,7 +56,8 @@ namespace TheaterApplicatie.Data
 
         public bool Update(int id, TObject klant)
         {
-            throw new NotImplementedException();
+            var resultaat = httpClient.PutAsJsonAsync<TObject>($"/api/{typeof(TObject).Name}/{id}", klant).Result;
+            return (resultaat.IsSuccessStatusCode);
         }
     }
 }
