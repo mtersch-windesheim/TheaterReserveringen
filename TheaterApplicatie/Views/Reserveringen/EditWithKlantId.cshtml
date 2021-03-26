@@ -1,19 +1,41 @@
 ﻿@model IEnumerable<Reservering>
+@{ 
+    string rijen = "ABCDE";
+    int aantalStoelen = 6;
+}
+<span>@ViewData["klantgegevens"]</span>
     <form method="post">
         <input type="hidden" name="klantId" value="@ViewData["klantId"]" />
-        <ul>
-            @foreach (var reservering in Model)
+        <table>
+            @* Even de logica omgekeerd: loop over rijen en stoelen, en zoek de bijbehorende reservering in de lijst *@
+            @foreach (char rij in rijen)
             {
-                <li>
-                    <input type="checkbox" name="reserveringIds" value="@reservering.ReserveringId"
-                           @if (reservering.Bezet) { @Html.Raw(" checked= \"checked\"") ; }
-                           @if (reservering.Bezet && !(reservering.KlantId.ToString() == ViewData["klantId"].ToString())) { @Html.Raw(" disabled"); }
-                           />
-                    <span @if (!reservering.Bezet) { @Html.Raw("style=\"background-color:green\"") ; } else if (reservering.KlantId == (int)(ViewData["klantId"])) { @Html.Raw("style=\"background-color:blue\"") ; } else { @Html.Raw("style=\"background-color:red\"") ; }>
-                        @reservering.Naam
-                    </span>
-                </li>
+            <tr>
+                @for (int stoel = 1; stoel <= aantalStoelen; stoel++)
+                {
+                    <td>
+                        @{
+                            Reservering reservering = Model.FirstOrDefault(res => res.Naam.Equals($"{rij}{stoel}"));
+                            string bgcolor;
+                            if (!reservering.Bezet)
+                                bgcolor = "green";
+                            else if (reservering.KlantId == (int)(ViewData["klantId"]))
+                                bgcolor = "blue";
+                            else
+                                bgcolor = "red";
+                            bool disabled = reservering.Bezet && !(reservering.KlantId.ToString() == ViewData["klantId"].ToString());   // Dubbelcheck: ToString() nodig?
+                        }
+                        <input type="checkbox" name="reserveringIds" value="@reservering.ReserveringId"
+                               @if (reservering.Bezet) { @Html.Raw(" checked= \"checked\"") ; }
+                               @if (disabled) { @Html.Raw(" disabled") ; } />
+                        <br />
+                        <div style="background-color: @bgcolor; color: white; width: 6em">
+                            @reservering.Naam
+                        </div>
+                    </td>
+                }
+            </tr>
             }
-        </ul>
+        </table>
         <input type="submit" value="Reserveren" />
     </form>
