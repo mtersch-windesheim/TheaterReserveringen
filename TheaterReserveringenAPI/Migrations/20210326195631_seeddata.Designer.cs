@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheaterReserveringenAPI.Data;
 
 namespace TheaterReserveringenAPI.Migrations
 {
     [DbContext(typeof(TheaterReserveringenAPIContext))]
-    partial class TheaterReserveringenAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20210326195631_seeddata")]
+    partial class seeddata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
