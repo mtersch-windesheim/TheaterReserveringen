@@ -4,12 +4,13 @@
     {
     <li>
         <input type="checkbox"
-               @if (reservering.Bezet) {
-                   @Html.Raw("checked= \"checked\"")
-                   }
+               @if (reservering.Bezet) { @Html.Raw(" checked= \"checked\""); }
+               @if (reservering.Bezet && (reservering.KlantId != (int)(ViewData["klantId"]))) { Html.Raw(" disabled"); }
                />
         <span
-              style="background-color:red"
+              @if (!reservering.Bezet) { @Html.Raw("style=\"background-color:green\""); }
+              else if(reservering.KlantId == (int)(ViewData["klantId"])) { @Html.Raw("style=\"background-color:blue\""); }
+              else { @Html.Raw("style=\"background-color:red\""); }
               >
             @reservering.Naam
         </span>
