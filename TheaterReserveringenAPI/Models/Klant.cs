@@ -9,7 +9,7 @@ namespace TheaterReserveringenAPI.Models
     public class Klant
     {
         [Key]
-        public int KlantId { get; set; }
+        public int? KlantId { get; set; }
         [Required]
         [MinLength(2)]
         public string Naam { get; set; }

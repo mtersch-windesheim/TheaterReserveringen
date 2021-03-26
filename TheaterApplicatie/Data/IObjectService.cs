@@ -9,9 +9,9 @@ namespace TheaterApplicatie.Data
     {
         public List<TObject> GetAll();
         public TObject Get(int id);
-        public bool Add(TObject klant);
+        public bool Add(TObject apiObject);
         public bool Delete(int id);
-        public bool Update(int id, TObject klant);
+        public bool Update(int id, TObject apiObject);
         public bool Exists(int id);
     }
 }

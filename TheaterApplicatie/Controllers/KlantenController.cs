@@ -22,11 +22,8 @@ namespace TheaterApplicatie.Controllers
         // GET: KlantenController
         public ActionResult Index()
         {
-            // TODO: Lijst van klanten ophalen
-
             List<Klant> klanten = klantService.GetAll().OrderBy(klant => klant.Naam).ToList();
             List<Reservering> reserveringen = reserveringService.GetAll();
-            // ViewData["aantal"] = klanten.Count;
             foreach(Klant klant in klanten)
             {
                 List<Reservering> klantReserveringen = reserveringen.Where(res => res.KlantId == klant.KlantId).ToList();
@@ -39,7 +36,11 @@ namespace TheaterApplicatie.Controllers
         // GET: KlantenController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            Klant klant = klantService.Get(id);
+            if (klant == null)
+                return NotFound();
+            else
+                return View(klant);
         }
 
         // GET: KlantenController/Create
@@ -51,58 +52,68 @@ namespace TheaterApplicatie.Controllers
         // POST: KlantenController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Klant klant)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                if (klantService.Add(klant))
+                    return RedirectToAction(nameof(Index));
+                else
+                    return View(klant);
             }
-            catch
-            {
-                return View();
-            }
+            else
+                return View(klant);
         }
 
         // GET: KlantenController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Klant klant = klantService.Get(id);
+            if (klant == null)
+                return NotFound();
+            else
+                return View(klant);
         }
 
         // POST: KlantenController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Klant klant)
         {
-            try
-            {
+            if (!ModelState.IsValid)
+                return View(klant);
+
+            if (!klantService.Exists(id))
+                return View(klant);         // Of: NotFound() ?
+
+            if (klantService.Update(id, klant))
                 return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            else
+                return View(klant);
         }
 
         // GET: KlantenController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Klant klant = klantService.Get(id);
+            if (klant == null)
+                return NotFound();
+            else
+                return View(klant);
         }
 
         // POST: KlantenController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteAction(int id)
         {
-            try
-            {
+            if (!klantService.Exists(id))
+                return NotFound();
+
+            if (klantService.Delete(id))
                 return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            else
+                return NotFound();
         }
     }
 }

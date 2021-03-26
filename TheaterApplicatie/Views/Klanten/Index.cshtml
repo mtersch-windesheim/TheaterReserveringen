@@ -52,9 +52,9 @@
                 }
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Edit", "Edit", new { id=item.KlantId }) |
+                @Html.ActionLink("Details", "Details", new { id=item.KlantId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.KlantId }) |
                 @Html.ActionLink("Reserveren", "EditWithKlantId", "Reserveringen", new { id = item.KlantId })
             </td>
         </tr>
