@@ -27,12 +27,19 @@ namespace TheaterApplicatie.Data
 
         public bool Exists(int id)
         {
-            throw new NotImplementedException();
+            return Get(id) != null;
         }
 
         public TObject Get(int id)
         {
-            throw new NotImplementedException();
+            TObject apiObject = default(TObject);
+            // Ophalen uit API
+            var resultaat = httpClient.GetAsync($"/api/{typeof(TObject).Name}/{id}").Result;
+            if (resultaat.IsSuccessStatusCode)
+            {
+                apiObject = resultaat.Content.ReadAsAsync<TObject>().Result;
+            }
+            return apiObject;
         }
 
         public List<TObject> GetAll()
