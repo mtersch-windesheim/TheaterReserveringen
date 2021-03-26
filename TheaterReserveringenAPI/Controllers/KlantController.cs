@@ -12,11 +12,11 @@ namespace TheaterReserveringenAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class KlantenController : ControllerBase
+    public class KlantController : ControllerBase
     {
         private readonly TheaterReserveringenAPIContext _context;
 
-        public KlantenController(TheaterReserveringenAPIContext context)
+        public KlantController(TheaterReserveringenAPIContext context)
         {
             _context = context;
         }

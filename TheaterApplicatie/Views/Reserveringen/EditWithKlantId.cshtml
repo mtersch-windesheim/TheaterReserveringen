@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Reservering>
+<ul>
+    @foreach (var reservering in Model)
+    {
+    <li>
+        <input type="checkbox"
+               @if (reservering.Bezet) {
+                   @Html.Raw("checked= \"checked\"")
+                   }
+               />
+        <span
+              style="background-color:red"
+              >
+            @reservering.Naam
+        </span>
+    </li>
+    }
+</ul>

@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TheaterApplicatie.Data;
+using TheaterApplicatie.Models;
 
 namespace TheaterApplicatie
 {
@@ -24,6 +26,8 @@ namespace TheaterApplicatie
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddSingleton<IObjectService<Klant>>(new ObjectApiService<Klant>());
+            services.AddSingleton<IObjectService<Reservering>>(new ObjectApiService<Reservering>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +54,7 @@ namespace TheaterApplicatie
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Klanten}/{action=Index}/{id?}");
             });
         }
     }

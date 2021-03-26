@@ -9,46 +9,35 @@ using TheaterApplicatie.Models;
 
 namespace TheaterApplicatie.Controllers
 {
-    public class KlantenController : Controller
+    public class ReserveringenController : Controller
     {
+        private readonly IObjectService<Reservering> objectService;
         private readonly IObjectService<Klant> klantService;
-        private readonly IObjectService<Reservering> reserveringService;
 
-        public KlantenController(IObjectService<Klant> klantService, IObjectService<Reservering> reserveringService)
+        public ReserveringenController(IObjectService<Reservering> objectService, IObjectService<Klant> klantService)
         {
+            this.objectService = objectService;
             this.klantService = klantService;
-            this.reserveringService = reserveringService;
         }
-        // GET: KlantenController
+        // GET: ReserveringenController
         public ActionResult Index()
         {
-            // TODO: Lijst van klanten ophalen
-
-            List<Klant> klanten = klantService.GetAll().OrderBy(klant => klant.Naam).ToList();
-            List<Reservering> reserveringen = reserveringService.GetAll();
-            // ViewData["aantal"] = klanten.Count;
-            foreach(Klant klant in klanten)
-            {
-                List<Reservering> klantReserveringen = reserveringen.Where(res => res.KlantId == klant.KlantId).ToList();
-                klant.Reserveringen = klantReserveringen;
-            }
-
-            return View(klanten);
+            return View(objectService.GetAll());
         }
 
-        // GET: KlantenController/Details/5
+        // GET: ReserveringenController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: KlantenController/Create
+        // GET: ReserveringenController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: KlantenController/Create
+        // POST: ReserveringenController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -63,13 +52,13 @@ namespace TheaterApplicatie.Controllers
             }
         }
 
-        // GET: KlantenController/Edit/5
+        // GET: ReserveringenController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: KlantenController/Edit/5
+        // POST: ReserveringenController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -84,13 +73,13 @@ namespace TheaterApplicatie.Controllers
             }
         }
 
-        // GET: KlantenController/Delete/5
+        // GET: ReserveringenController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: KlantenController/Delete/5
+        // POST: ReserveringenController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
@@ -103,6 +92,25 @@ namespace TheaterApplicatie.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult EditWithKlantId(int id)
+        {
+            if (!klantService.Exists(id))
+                return NotFound();
+            
+            // Wat nodig:
+            // - *alle* stoelen (= Reservering-objecten in DB)
+            List<Reservering> reserveringen = objectService.GetAll();
+            // - reserveringen van huidige klant
+            //List<Reservering> klantReserveringen = reserveringen.Where(res => res.KlantId == id).ToList();
+            // - huidige klant (i.v.m. klantdetails bovenin)
+            Klant klant = klantService.Get(id);
+
+            ViewData["klantgegevens"] = $"{klant.Naam} - {klant.Email} - {klant.Woonplaats}";
+            ViewData["klantId"] = id;
+
+            return View(reserveringen);
         }
     }
 }
